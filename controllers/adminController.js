@@ -9,6 +9,10 @@ const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
 const { generateIdCard } = require('../utils/generateIdCard');
 
+// Preset admin credentials with env overrides
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'admin123';
+
 // Helper function for handling errors
 const handleError = (res, error, message) => {
   console.error(message, error);
@@ -573,7 +577,7 @@ router.post('/login', (req, res) => {
     });
   }
 
-  if (username === process.env.ADMIN_USER && password === process.env.ADMIN_PASS) {
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
     res.json({ 
       success: true,
       message: 'Login successful',
@@ -1071,7 +1075,7 @@ router.post('/change-password', async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     
-    if (currentPassword !== process.env.ADMIN_PASS) {
+    if (currentPassword !== ADMIN_PASS) {
       return res.status(401).json({
         success: false,
         error: 'Current password is incorrect'

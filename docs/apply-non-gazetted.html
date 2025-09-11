@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Non-Gazetted I-Card Application - East Coast Railway</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            padding-top: 20px;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 5px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid #fff;
+        }
+
+        .nav-menu a span {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .railway-logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .railway-logo::before {
+            content: "🚂";
+            font-size: 30px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            padding: 20px 30px;
+            font-size: 20px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .form-content {
+            padding: 30px;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            color: #1976d2;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1976d2;
+        }
+
+        /* Form Rows */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .required {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* File Upload */
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Family Members */
+        .family-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .family-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .family-table th,
+        .family-table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .family-table th {
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            color: white;
+        }
+
+        .family-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .add-family-btn {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .remove-family-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #757575, #9e9e9e);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Response Message */
+        #responseMsg {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            padding: 20px;
+            background: white;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .nav-menu li {
+                flex: 0 0 auto;
+                margin-bottom: 0;
+            }
+            
+            .nav-menu a {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            
+            .nav-menu a:hover, .nav-menu a.active {
+                border-left: none;
+                border-bottom: 4px solid #fff;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>I-Card Portal</h2>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="index.html"><span><i class="fas fa-home"></i></span> Home</a></li>
+            <li><a href="apply-non-gazetted.html" class="active"><span><i class="fas fa-id-card"></i></span> Apply for I-card (NG)</a></li>
+            <li><a href="apply-gazetted.html"><span><i class="fas fa-id-card-alt"></i></span> Apply for I-card (GAZ)</a></li>
+            <li><a href="status.html"><span><i class="fas fa-search"></i></span> Application Status</a></li>
+            <li><a href="admin.html"><span><i class="fas fa-lock"></i></span> Admin Login</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="railway-logo"></div>
+                    <div class="logo-text">East Coast Railway</div>
+                </div>
+                <h1 class="header-title">Non-Gazetted I-Card Application</h1>
+                <div class="dev-credit">
+                    <div>Developed by IT Centre</div>
+                    <div class="it-centre-logo">IT<br>Centre<br>East Coast Railway</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- Form Container -->
+            <div class="form-container">
+                <div class="form-header">Employee Registration Form (Non Gazetted)</div>
+                
+                <form id="nonGazForm" enctype="multipart/form-data" class="form-content">
+                    <input type="hidden" name="userId" id="userId">
+                    
+                    <!-- Personal Details Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Personal Details</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name (As in Records) <span class="required">*</span></label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="empNo">Employee Number <span class="required">*</span></label>
+                                <input type="text" id="empNo" name="empNo" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="designation">Designation <span class="required">*</span></label>
+                                <input type="text" id="designation" name="designation" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="department">Department <span class="required">*</span></label>
+                                <select id="department" name="department" required>
+                                    <option value="">Select Department</option>
+                                    <option value="ACCOUNTS">ACCOUNTS</option>
+                                    <option value="COMMERCIAL">COMMERCIAL</option>
+                                    <option value="ELECTRICAL">ELECTRICAL</option>
+                                    <option value="ENGINEERING">ENGINEERING</option>
+                                    <option value="GA">GA</option>
+                                    <option value="MECHANICAL">MECHANICAL</option>
+                                    <option value="MEDICAL">MEDICAL</option>
+                                    <option value="OPERATING">OPERATING</option>
+                                    <option value="PERSONNEL">PERSONNEL</option>
+                                    <option value="RRB">RRB</option>
+                                    <option value="S&T">S&T</option>
+                                    <option value="SAFETY">SAFETY</option>
+                                    <option value="SECURITY">SECURITY</option>
+                                    <option value="STORES">STORES</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="station">Station/Division <span class="required">*</span></label>
+                                <input type="text" id="station" name="station" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="billUnit">Bill Unit <span class="required">*</span></label>
+                                <select id="billUnit" name="billUnit" required>
+                                    <option value="">Select Bill Unit</option>
+                                    <option value="3101001">3101001</option>
+                                    <option value="3101002">3101002</option>
+                                    <option value="3101003">3101003</option>
+                                    <option value="3101004">3101004</option>
+                                    <option value="3101010">3101010</option>
+                                    <option value="3101023">3101023</option>
+                                    <option value="3101024">3101024</option>
+                                    <option value="3101025">3101025</option>
+                                    <option value="3101026">3101026</option>
+                                    <option value="3101027">3101027</option>
+                                    <option value="3101065">3101065</option>
+                                    <option value="3101066">3101066</option>
+                                    <option value="3101165">3101165</option>
+                                    <option value="3101166">3101166</option>
+                                    <option value="3101285">3101285</option>
+                                    <option value="3101286">3101286</option>
+                                    <option value="3101287">3101287</option>
+                                    <option value="3101288">3101288</option>
+                                    <option value="3101470">3101470</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dob">Date of Birth <span class="required">*</span></label>
+                                <input type="date" id="dob" name="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mobile">Mobile Number <span class="required">*</span></label>
+                                <input type="tel" id="mobile" name="mobile" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Address Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Residential Address</h3>
+                        <div class="form-group">
+                            <label for="address">Full Address <span class="required">*</span></label>
+                            <textarea id="address" name="address" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Application Details Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Application Details</h3>
+                        <div class="form-group">
+                            <label for="reason">Reason for New I-Card <span class="required">*</span></label>
+                            <textarea id="reason" name="reason" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Emergency Contact Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Emergency Contact</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="emergencyContactName">Contact Person Name</label>
+                                <input type="text" id="emergencyContactName" name="emergencyContactName">
+                            </div>
+                            <div class="form-group">
+                                <label for="emergencyContactNumber">Contact Number</label>
+                                <input type="tel" id="emergencyContactNumber" name="emergencyContactNumber">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Family Details Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Family Members Details</h3>
+                        <div class="form-group">
+                            <table class="family-table" id="familyTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Relationship</th>
+                                        <th>Date of Birth</th>
+                                        <th>Blood Group</th>
+                                        <th>Identification Mark</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="familyMembers">
+                                    <!-- Family members will be added here -->
+                                </tbody>
+                            </table>
+                            <button type="button" class="add-family-btn" id="addFamilyMember">Add Family Member</button>
+                            <input type="hidden" name="family" id="familyData">
+                        </div>
+                    </div>
+                    
+                    <!-- Document Upload Section -->
+                    <div class="form-section">
+                        <h3 class="section-title">Document Upload</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Upload Photograph <span class="required">*</span></label>
+                                <div class="file-upload">
+                                    <label for="photo" class="file-upload-label">Choose File</label>
+                                    <span class="file-name" id="photoName">No file chosen</span>
+                                    <input type="file" id="photo" name="photo" accept="image/*" required>
+                                </div>
+                                <small>Recent passport-size photo (Max 5MB, JPG/PNG)</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Upload Signature <span class="required">*</span></label>
+                                <div class="file-upload">
+                                    <label for="sign" class="file-upload-label">Choose File</label>
+                                    <span class="file-name" id="signName">No file chosen</span>
+                                    <input type="file" id="sign" name="sign" accept="image/*" required>
+                                </div>
+                                <small>Scanned signature (Max 5MB, JPG/PNG)</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/'">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </div>
+                    
+                    <!-- Response Message -->
+                    <div id="responseMsg"></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">
+            Designed, Developed and Maintained by IT Centre/ECoR/Bhubaneswar
+        </div>
+    </div>
+
+    <!-- Add after responseMsg -->
+    <div id="appNoModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+      <div style="background:#fff;padding:32px 24px;border-radius:10px;max-width:90vw;min-width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <h2 style="color:#1976d2;margin-bottom:12px;">Application Submitted!</h2>
+        <div style="font-size:18px;margin-bottom:8px;">Your Application Number:</div>
+        <div id="modalAppNo" style="font-size:22px;font-weight:bold;color:#2d5a27;margin-bottom:18px;"></div>
+        <button onclick="document.getElementById('appNoModal').style.display='none'" style="padding:8px 24px;font-size:16px;background:#1976d2;color:#fff;border:none;border-radius:6px;cursor:pointer;">OK</button>
+      </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize form
+            document.getElementById('userId').value = 'user-' + Math.random().toString(36).substr(2, 9);
+            
+            // Setup file input displays
+            setupFileInput('photo', 'photoName');
+            setupFileInput('sign', 'signName');
+            
+            // Initialize family members table
+            initFamilyMembers();
+            
+            // Form submission handler
+            document.getElementById('nonGazForm').addEventListener('submit', handleNonGazettedSubmission);
+        });
+
+        // File input setup
+        function setupFileInput(inputId, displayId) {
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            
+            input.addEventListener('change', () => {
+                display.textContent = input.files.length > 0 ? input.files[0].name : 'No file chosen';
+            });
+        }
+
+        // Family members management
+        let familyMembers = [];
+
+        function initFamilyMembers() {
+            document.getElementById('addFamilyMember').addEventListener('click', addFamilyMemberRow);
+        }
+
+        function addFamilyMemberRow() {
+            const tbody = document.getElementById('familyMembers');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="family-name" placeholder="Full Name" required></td>
+                <td>
+                    <select class="family-relationship" required>
+                        <option value="">Select Relationship</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Son">Son</option>
+                        <option value="Daughter">Daughter</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </td>
+                <td><input type="date" class="family-dob" required></td>
+                <td>
+                    <select class="family-blood-group">
+                        <option value="">Select Blood Group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </td>
+                <td><input type="text" class="family-identification-mark" placeholder="Identification Mark"></td>
+                <td><button type="button" class="remove-family-btn">Remove</button></td>
+            `;
+            
+            tbody.appendChild(row);
+            
+            // Add remove functionality
+            row.querySelector('.remove-family-btn').addEventListener('click', () => {
+                row.remove();
+                updateFamilyData();
+            });
+            
+            // Add change listeners
+            const inputs = row.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('change', updateFamilyData);
+            });
+        }
+
+        function updateFamilyData() {
+            const rows = document.querySelectorAll('#familyMembers tr');
+            familyMembers = [];
+            
+            rows.forEach(row => {
+                familyMembers.push({
+                    name: row.querySelector('.family-name').value,
+                    relationship: row.querySelector('.family-relationship').value,
+                    dob: row.querySelector('.family-dob').value,
+                    bloodGroup: row.querySelector('.family-blood-group').value,
+                    identificationMark: row.querySelector('.family-identification-mark').value
+                });
+            });
+            
+            document.getElementById('familyData').value = JSON.stringify(familyMembers);
+        }
+
+        // Form submission handler
+        async function handleNonGazettedSubmission(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const responseMsg = document.getElementById('responseMsg');
+            
+            try {
+                // Update family data before submission
+                updateFamilyData();
+                
+                const formData = new FormData(form);
+                
+                // Add metadata
+                formData.append('status', 'Pending');
+                formData.append('submittedAt', new Date().toISOString());
+                
+                // Show loading state
+                responseMsg.className = 'loading';
+                responseMsg.textContent = 'Submitting application...';
+                responseMsg.style.display = 'block';
+
+                const response = await fetch('/api/forms/non-gazetted', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    responseMsg.className = 'success';
+                    responseMsg.textContent = result.message || 'Application submitted successfully!';
+                    // Show application number modal
+                    document.getElementById('modalAppNo').textContent = result.applicationNo || '';
+                    document.getElementById('appNoModal').style.display = 'flex';
+                    
+                    // Notify admin panel via WebSocket
+                    if (window.io) {
+                        window.io.emit('new-application', {
+                            applicationId: result.id,
+                            type: 'non-gazetted',
+                            name: formData.get('name'),
+                            designation: formData.get('designation'),
+                            department: formData.get('department'),
+                            submittedAt: new Date().toISOString(),
+                            status: 'Pending'
+                        });
+                    }
+                    
+                    // Reset form after successful submission
+                    setTimeout(() => {
+                        form.reset();
+                        document.querySelectorAll('.file-name').forEach(el => {
+                            el.textContent = 'No file chosen';
+                        });
+                        document.getElementById('familyMembers').innerHTML = '';
+                        familyMembers = [];
+                        document.getElementById('familyData').value = '';
+                    }, 2000);
+                } else {
+                    responseMsg.className = 'error';
+                    responseMsg.textContent = result.error || 'Submission failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                responseMsg.className = 'error';
+                responseMsg.textContent = 'Network error. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "server.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/server.js" },
+    { "src": "/(.*)", "headers": { "cache-control": "no-cache" }, "dest": "/public/$1" }
+  ],
+  "env": {
+    "EXAMPLE_NAME": "I9JU23NF394R6HH"
+  }
+}

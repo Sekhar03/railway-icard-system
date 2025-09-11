@@ -159,4 +159,10 @@ const startServer = (port) => {
   return server;
 };
 
-startServer(PORT);
+// Only start the server in non-Vercel environments
+if (!process.env.VERCEL) {
+  startServer(PORT);
+}
+
+// Export the app for Vercel/@vercel/node
+module.exports = app;

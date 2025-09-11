@@ -92,6 +92,22 @@ Notes:
 
 After backend is live, update frontend AJAX/API base URLs to the deployed API domain.
 
+### 4) Deploy on Vercel (server + static)
+- Import GitHub repo: `Sekhar03/railway-icard-system`
+- Framework Preset: Express
+- Root Directory: `./`
+- Build Command: None
+- Output Directory: N/A
+- Install Command: auto (`npm install`/`yarn install`/`pnpm install`)
+- Environment Variables:
+  - `EXAMPLE_NAME=I9JU23NF394R6HH`
+  - `MONGO_URI=<your Mongo connection string>`
+  - `CORS_ORIGIN=*` (optional)
+
+Notes for Vercel:
+- `vercel.json` routes `/api/*` to the Node server. Static assets are served from `/public`.
+- The app exports the Express `app` and avoids calling `listen` on Vercel.
+
 ## Notes
 - Ensure MongoDB is accessible via `MONGO_URI`.
 - Uploaded images are stored under `public/uploads/` by default.

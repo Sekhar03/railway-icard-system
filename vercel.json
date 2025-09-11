@@ -4,6 +4,7 @@
     { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
+    { "src": "^/$", "dest": "/public/index.html" },
     { "src": "/api/(.*)", "dest": "/server.js" },
     { "src": "/(.*)", "headers": { "cache-control": "no-cache" }, "dest": "/public/$1" }
   ],

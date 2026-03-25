@@ -10,6 +10,7 @@
     { "src": "/(.*)", "dest": "/public/$1" }
   ],
   "env": {
-    "EXAMPLE_NAME": "I9JU23NF394R6HH"
+    "MONGO_URI": "mongodb+srv://sekharparida2003_db_user:hp3PnuMPzwunAxWb@cluster0.j8xfgws.mongodb.net/icard_db?retryWrites=true&w=majority&appName=Cluster0",
+    "CORS_ORIGIN": "*"
   }
 }

@@ -869,15 +869,17 @@
           },
           { 
             data: 'photo', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="30" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.photoBase64 ? `data:image/jpeg;base64,${row.photoBase64}` : (row.photo ? `/uploads/${row.photo}` : null);
+              return src ? `<img src="${src}" width="30" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'sign', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="50" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.signBase64 ? `data:image/jpeg;base64,${row.signBase64}` : (row.sign ? `/uploads/${row.sign}` : null);
+              return src ? `<img src="${src}" width="50" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'family',
@@ -1041,15 +1043,17 @@
           },
           { 
             data: 'photo', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="30" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.photoBase64 ? `data:image/jpeg;base64,${row.photoBase64}` : (row.photo ? `/uploads/${row.photo}` : null);
+              return src ? `<img src="${src}" width="30" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'sign', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="50" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.signBase64 ? `data:image/jpeg;base64,${row.signBase64}` : (row.sign ? `/uploads/${row.sign}` : null);
+              return src ? `<img src="${src}" width="50" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'family',
@@ -1213,15 +1217,17 @@
           },
           { 
             data: 'photo', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="30" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.photoBase64 ? `data:image/jpeg;base64,${row.photoBase64}` : (row.photo ? `/uploads/${row.photo}` : null);
+              return src ? `<img src="${src}" width="30" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'sign', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="50" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.signBase64 ? `data:image/jpeg;base64,${row.signBase64}` : (row.sign ? `/uploads/${row.sign}` : null);
+              return src ? `<img src="${src}" width="50" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'family',
@@ -1389,15 +1395,17 @@
           },
           { 
             data: 'photo', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="30" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.photoBase64 ? `data:image/jpeg;base64,${row.photoBase64}` : (row.photo ? `/uploads/${row.photo}` : null);
+              return src ? `<img src="${src}" width="30" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'sign', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="50" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.signBase64 ? `data:image/jpeg;base64,${row.signBase64}` : (row.sign ? `/uploads/${row.sign}` : null);
+              return src ? `<img src="${src}" width="50" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'family',
@@ -1544,15 +1552,17 @@
           },
           { 
             data: 'photo', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="30" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.photoBase64 ? `data:image/jpeg;base64,${row.photoBase64}` : (row.photo ? `/uploads/${row.photo}` : null);
+              return src ? `<img src="${src}" width="30" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'sign', 
-            render: data => data ? 
-              `<img src="/uploads/${data}" width="50" height="30">` : 
-              'N/A'
+            render: (data, type, row) => {
+              const src = row.signBase64 ? `data:image/jpeg;base64,${row.signBase64}` : (row.sign ? `/uploads/${row.sign}` : null);
+              return src ? `<img src="${src}" width="50" height="30">` : 'N/A';
+            }
           },
           { 
             data: 'family',
@@ -1921,13 +1931,13 @@
                 <td class="label">PHOTO</td>
                 <td class="value">
                   <div class="media-container">
-                    ${application.photo ? `<img src="/uploads/${application.photo}" alt="PHOTO">` : 'No photo'}
+                    ${application.photoBase64 ? `<img src="data:image/jpeg;base64,${application.photoBase64}" alt="PHOTO">` : (application.photo ? `<img src="/uploads/${application.photo}" alt="PHOTO">` : 'No photo')}
                   </div>
                 </td>
                 <td class="label">SIGNATURE</td>
                 <td class="value">
                   <div class="media-container">
-                    ${application.sign ? `<img src="/uploads/${application.sign}" alt="SIGNATURE">` : 'No signature'}
+                    ${application.signBase64 ? `<img src="data:image/jpeg;base64,${application.signBase64}" alt="SIGNATURE">` : (application.sign ? `<img src="/uploads/${application.sign}" alt="SIGNATURE">` : 'No signature')}
                   </div>
                 </td>
               </tr>

@@ -83,11 +83,11 @@ const EmployeeGazSchema = new mongoose.Schema({
     }], 
     default: [] 
   },
-  photo: {
+  photoBase64: {
     type: String,
     default: ''
   },
-  sign: {
+  signBase64: {
     type: String,
     default: ''
   },

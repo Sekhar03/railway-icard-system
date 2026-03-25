@@ -771,8 +771,8 @@
                 `;
             }
 
-            const photoUrl = data.photo ? `/uploads/${encodeURIComponent(data.photo)}` : 'https://via.placeholder.com/150?text=No+Photo';
-            const signUrl = data.sign ? `/uploads/${encodeURIComponent(data.sign)}` : 'https://via.placeholder.com/150?text=No+Signature';
+            const photoUrl = data.photoBase64 ? `data:image/jpeg;base64,${data.photoBase64}` : (data.photo ? `/uploads/${encodeURIComponent(data.photo)}` : 'https://via.placeholder.com/150?text=No+Photo');
+            const signUrl = data.signBase64 ? `data:image/jpeg;base64,${data.signBase64}` : (data.sign ? `/uploads/${encodeURIComponent(data.sign)}` : 'https://via.placeholder.com/150?text=No+Signature');
 
             html += `
                 <div class="documents-section" style="margin-top: 25px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">

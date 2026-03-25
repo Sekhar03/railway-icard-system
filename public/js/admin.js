@@ -275,11 +275,11 @@ function renderIdCardHTML(app, type = 'gazetted') {
         <div class="image-section" style="display:flex;gap:20px;margin-top:20px;">
           <div class="image-container" style="flex:1;text-align:center;">
             <h4>Photo</h4>
-            ${app.photo ? `<img src="/uploads/${app.photo}" alt="Applicant Photo" style="max-width:120px;max-height:150px;border:1px solid #ddd;padding:5px;background:white;">` : 'No photo available'}
+            ${app.photoBase64 ? `<img src="data:image/jpeg;base64,${app.photoBase64}" alt="Applicant Photo" style="max-width:120px;max-height:150px;border:1px solid #ddd;padding:5px;background:white;">` : (app.photo ? `<img src="/uploads/${app.photo}" alt="Applicant Photo" style="max-width:120px;max-height:150px;border:1px solid #ddd;padding:5px;background:white;">` : 'No photo available')}
           </div>
           <div class="image-container" style="flex:1;text-align:center;">
             <h4>Signature</h4>
-            ${app.sign ? `<img src="/uploads/${app.sign}" alt="Applicant Signature" style="max-width:220px;max-height:60px;border:1px solid #ddd;padding:5px;background:white;">` : 'No signature available'}
+            ${app.signBase64 ? `<img src="data:image/jpeg;base64,${app.signBase64}" alt="Applicant Signature" style="max-width:220px;max-height:60px;border:1px solid #ddd;padding:5px;background:white;">` : (app.sign ? `<img src="/uploads/${app.sign}" alt="Applicant Signature" style="max-width:220px;max-height:60px;border:1px solid #ddd;padding:5px;background:white;">` : 'No signature available')}
           </div>
         </div>
       </div>

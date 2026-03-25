@@ -61,8 +61,8 @@ router.post('/gazetted',
         emergencyContactName,
         emergencyContactNumber,
         family: parseFamilyData(family),
-        photo: req.files?.photo?.[0]?.filename || '',
-        sign: req.files?.sign?.[0]?.filename || '',
+        photoBase64: req.files?.photo?.[0]?.buffer ? req.files.photo[0].buffer.toString('base64') : '',
+        signBase64: req.files?.sign?.[0]?.buffer ? req.files.sign[0].buffer.toString('base64') : '',
         hindiName: req.files?.hindiName?.[0]?.filename || '',
         hindiDesig: req.files?.hindiDesig?.[0]?.filename || '',
         status: 'Pending'
@@ -129,8 +129,8 @@ router.post('/non-gazetted',
         emergencyContactName,
         emergencyContactNumber,
         family: parseFamilyData(family),
-        photo: req.files?.photo?.[0]?.filename || '',
-        sign: req.files?.sign?.[0]?.filename || '',
+        photoBase64: req.files?.photo?.[0]?.buffer ? req.files.photo[0].buffer.toString('base64') : '',
+        signBase64: req.files?.sign?.[0]?.buffer ? req.files.sign[0].buffer.toString('base64') : '',
         status: 'Pending'
       };
 

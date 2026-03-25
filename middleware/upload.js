@@ -3,29 +3,8 @@ const path = require('path');
 const fs = require('fs');
 
 // Determine upload base path
-const isVercel = !!process.env.VERCEL;
-const uploadBasePath = process.env.UPLOAD_DIR || (isVercel
-  ? path.join('/tmp', 'uploads')
-  : path.join(__dirname, '..', 'public', 'uploads'));
-
-// Configure storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    try {
-      if (!fs.existsSync(uploadBasePath)) {
-        fs.mkdirSync(uploadBasePath, { recursive: true });
-      }
-      cb(null, uploadBasePath);
-    } catch (err) {
-      cb(err);
-    }
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname || '');
-    cb(null, (file.fieldname || 'file') + '-' + uniqueSuffix + ext);
-  }
-});
+// Use memory storage to keep files in RAM as Buffer objects
+const storage = multer.memoryStorage();
 
 // File filter to allow only images
 const fileFilter = (req, file, cb) => {

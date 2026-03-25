@@ -249,16 +249,19 @@ function drawFullIdCard(doc, application, type, hasHindiFont) {
      .strokeColor('#000000')
      .lineWidth(1)
      .stroke();
-  if (application.photo) {
-    const photoPath = path.join(__dirname, '../public/uploads', application.photo);
-    if (fs.existsSync(photoPath)) {
-      doc.image(photoPath, photoX + 1, photoY + 1, {
+  if (application.photoBase64) {
+    try {
+      const photoBuffer = Buffer.from(application.photoBase64, 'base64');
+      doc.image(photoBuffer, photoX + 1, photoY + 1, {
         width: photoWidth - 2,
         height: photoHeight - 2,
         align: 'center',
         valign: 'center'
       });
-    } else {
+    } catch (err) {
+      console.error('Error rendering photo from Base64:', err);
+    }
+  } else {
       doc.fillColor('#e0e0e0')
          .rect(photoX + 1, photoY + 1, photoWidth - 2, photoHeight - 2)
          .fill()
@@ -269,7 +272,6 @@ function drawFullIdCard(doc, application, type, hasHindiFont) {
            align: 'center'
          });
     }
-  }
   // Employee details section (to the right of photo)
   let currentY = 85;
   const detailsStartX = 65;
@@ -344,13 +346,15 @@ function drawFullIdCard(doc, application, type, hasHindiFont) {
      .fontSize(6)
      .text('Signature of Issuing Authority', doc.page.width - 95, bottomY + 8);
   // Add signature if available
-  if (application.sign) {
-    const signPath = path.join(__dirname, '../public/uploads', application.sign);
-    if (fs.existsSync(signPath)) {
-      doc.image(signPath, 8, bottomY - 15, {
+  if (application.signBase64) {
+    try {
+      const signBuffer = Buffer.from(application.signBase64, 'base64');
+      doc.image(signBuffer, 8, bottomY - 15, {
         width: 45,
         height: 12
       });
+    } catch (err) {
+      console.error('Error rendering signature from Base64:', err);
     }
   }
   // ===== BACK SIDE =====

@@ -99,10 +99,12 @@ async function generateIdCard(application, type) {
       // 4. Photo Section
       const photoX = 5, photoY = 80, photoW = 50, photoH = 65;
       doc.rect(photoX, photoY, photoW, photoH).stroke('#000000');
-      if (application.photo) {
-        const photoPath = path.join(__dirname, '../public/uploads', application.photo);
-        if (fs.existsSync(photoPath)) {
-          doc.image(photoPath, photoX + 1, photoY + 1, { width: photoW - 2, height: photoH - 2 });
+      if (application.photoBase64) {
+        try {
+          const photoBuffer = Buffer.from(application.photoBase64, 'base64');
+          doc.image(photoBuffer, photoX + 1, photoY + 1, { width: photoW - 2, height: photoH - 2 });
+        } catch (err) {
+          console.error('Error rendering photo from Base64:', err);
         }
       }
 
@@ -133,10 +135,12 @@ async function generateIdCard(application, type) {
       renderBilingualLabel('जारीकर्ता प्राधिकारी का हस्ताक्षर', 'Signature of Issuing Authority', 170, sigY, { fontSize: 6 });
 
       // Holder Sign Image
-      if (application.sign) {
-        const signPath = path.join(__dirname, '../public/uploads', application.sign);
-        if (fs.existsSync(signPath)) {
-          doc.image(signPath, 5, sigY - 12, { width: 50, height: 12 });
+      if (application.signBase64) {
+        try {
+          const signBuffer = Buffer.from(application.signBase64, 'base64');
+          doc.image(signBuffer, 5, sigY - 12, { width: 50, height: 12 });
+        } catch (err) {
+          console.error('Error rendering signature from Base64:', err);
         }
       }
 

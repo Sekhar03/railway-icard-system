@@ -11,13 +11,6 @@ router.post('/gazetted', async (req, res) => {
     
     console.log('Gazetted status check request:', { applicationNo, ruid, dob });
     
-    if (!dob) {
-      return res.status(400).json({
-        success: false,
-        message: 'Date of Birth is required'
-      });
-    }
-
     if (!applicationNo && !ruid) {
       return res.status(400).json({
         success: false,
@@ -32,29 +25,28 @@ router.post('/gazetted', async (req, res) => {
       if (mongoose.Types.ObjectId.isValid(applicationNo)) {
         identifierOr.push({ _id: applicationNo });
       }
+      // Also check if applicationNo might be a ruid
       identifierOr.push({ ruid: applicationNo });
     }
     if (ruid) {
       identifierOr.push({ ruid: ruid });
     }
 
-    // Build possible dob formats
-    const dateFormats = [
-      dob,
-      new Date(dob).toISOString().split('T')[0],
-      new Date(dob + 'T00:00:00.000Z'),
-      new Date(dob + 'T00:00:00.000Z').toISOString().split('T')[0]
-    ];
+    // Build the query
+    const query = { $or: identifierOr };
 
-    // Final query
-    const query = {
-      $and: [
-        { $or: identifierOr },
-        { dob: { $in: dateFormats } }
-      ]
-    };
+    // Add DOB filter only if provided
+    if (dob) {
+      const dateFormats = [
+        dob,
+        new Date(dob).toISOString().split('T')[0],
+        new Date(dob + 'T00:00:00.000Z'),
+        new Date(dob + 'T00:00:00.000Z').toISOString().split('T')[0]
+      ];
+      query.dob = { $in: dateFormats };
+    }
 
-    console.log('Final query:', JSON.stringify(query, null, 2));
+    console.log('Final Gazetted query:', JSON.stringify(query, null, 2));
     const record = await Gazetted.findOne(query);
     console.log('Search result:', record ? 'Found' : 'Not found');
     
@@ -70,7 +62,7 @@ router.post('/gazetted', async (req, res) => {
       data: record 
     });
   } catch (error) {
-    console.error('Status check error:', error);
+    console.error('Gazetted status check error:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Internal server error',
@@ -86,13 +78,6 @@ router.post('/non-gazetted', async (req, res) => {
     
     console.log('Non-Gazetted status check request:', { applicationNo, empNo, dob });
     
-    if (!dob) {
-      return res.status(400).json({
-        success: false,
-        message: 'Date of Birth is required'
-      });
-    }
-
     if (!applicationNo && !empNo) {
       return res.status(400).json({
         success: false,
@@ -107,29 +92,28 @@ router.post('/non-gazetted', async (req, res) => {
       if (mongoose.Types.ObjectId.isValid(applicationNo)) {
         identifierOr.push({ _id: applicationNo });
       }
+      // Also check if applicationNo might be an empNo
       identifierOr.push({ empNo: applicationNo });
     }
     if (empNo) {
       identifierOr.push({ empNo: empNo });
     }
 
-    // Build possible dob formats
-    const dateFormats = [
-      dob,
-      new Date(dob).toISOString().split('T')[0],
-      new Date(dob + 'T00:00:00.000Z'),
-      new Date(dob + 'T00:00:00.000Z').toISOString().split('T')[0]
-    ];
+    // Build the query
+    const query = { $or: identifierOr };
 
-    // Final query
-    const query = {
-      $and: [
-        { $or: identifierOr },
-        { dob: { $in: dateFormats } }
-      ]
-    };
+    // Add DOB filter only if provided
+    if (dob) {
+      const dateFormats = [
+        dob,
+        new Date(dob).toISOString().split('T')[0],
+        new Date(dob + 'T00:00:00.000Z'),
+        new Date(dob + 'T00:00:00.000Z').toISOString().split('T')[0]
+      ];
+      query.dob = { $in: dateFormats };
+    }
 
-    console.log('Final query:', JSON.stringify(query, null, 2));
+    console.log('Final Non-Gazetted query:', JSON.stringify(query, null, 2));
     const record = await NonGazetted.findOne(query);
     console.log('Search result:', record ? 'Found' : 'Not found');
     
@@ -145,7 +129,7 @@ router.post('/non-gazetted', async (req, res) => {
       data: record 
     });
   } catch (error) {
-    console.error('Status check error:', error);
+    console.error('Non-Gazetted status check error:', error);
     res.status(500).json({ 
       success: false, 
       message: 'Internal server error',

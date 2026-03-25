@@ -2030,11 +2030,6 @@
         
         if (result.success) {
           alert('Application approved successfully!');
-          if (gazettedTable) gazettedTable.ajax.reload();
-          if (nonGazettedTable) nonGazettedTable.ajax.reload();
-          if (approvedTable) approvedTable.ajax.reload();
-          if (rejectedTable) rejectedTable.ajax.reload();
-          if (dashboardTable) dashboardTable.ajax.reload();
           loadCounts();
           showSection('approved-apps');
         } else {
@@ -2108,11 +2103,6 @@
         
         if (result.success) {
           alert('Application rejected successfully!');
-          if (gazettedTable) gazettedTable.ajax.reload();
-          if (nonGazettedTable) nonGazettedTable.ajax.reload();
-          if (approvedTable) approvedTable.ajax.reload();
-          if (rejectedTable) rejectedTable.ajax.reload();
-          if (dashboardTable) dashboardTable.ajax.reload();
           loadCounts();
           showSection('rejected-apps');
         } else {

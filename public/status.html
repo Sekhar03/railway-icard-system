@@ -480,46 +480,22 @@
                     Check Application Status
                 </div>
                 
-                <!-- Tab Navigation -->
-                <div class="status-tabs">
-                    <button class="tab-btn active" data-tab="gaz-status">Gazetted</button>
-                    <button class="tab-btn" data-tab="non-gaz-status">Non-Gazetted</button>
-                </div>
-
-                <!-- Gazetted Status Tab -->
-                <div id="gaz-status" class="tab-content active">
-                    <form id="gazStatusForm" onsubmit="event.preventDefault(); processStatusCheck('gazetted', this, 'gazStatusResult', 'gazCheckBtn');">
+                <!-- Unified Status Check -->
+                <div id="status-check-section" class="tab-content active">
+                    <form id="statusForm" onsubmit="event.preventDefault(); processStatusCheck(this);">
                         <div class="form-row">
                             <div class="form-group" style="grid-column: span 2;">
-                                <label for="gazAppId">Application Number:</label>
-                                <input type="text" id="gazAppId" name="applicationNo" placeholder="Enter Application Number (e.g. ECR-G-XXXXXX)" required>
+                                <label for="appId">Application Number / ID:</label>
+                                <input type="text" id="appId" name="applicationNo" placeholder="Enter Application Number (e.g. ECR-NG-XXXXXX)" required>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn" id="gazCheckBtn">
+                            <button type="submit" class="btn" id="checkBtn">
                                 <span class="btn-text">Check Status</span>
                             </button>
                         </div>
                     </form>
-                    <div id="gazStatusResult" class="status-result"></div>
-                </div>
-
-                <!-- Non-Gazetted Status Tab -->
-                <div id="non-gaz-status" class="tab-content">
-                    <form id="nonGazStatusForm" onsubmit="event.preventDefault(); processStatusCheck('non-gazetted', this, 'nonGazStatusResult', 'nonGazCheckBtn');">
-                        <div class="form-row">
-                            <div class="form-group" style="grid-column: span 2;">
-                                <label for="nonGazAppId">Application Number:</label>
-                                <input type="text" id="nonGazAppId" name="applicationNo" placeholder="Enter Application Number (e.g. ECR-NG-XXXXXX)" required>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="btn" id="nonGazCheckBtn">
-                                <span class="btn-text">Check Status</span>
-                            </button>
-                        </div>
-                    </form>
-                    <div id="nonGazStatusResult" class="status-result"></div>
+                    <div id="statusResult" class="status-result"></div>
                 </div>
             </div>
         </div>
@@ -591,21 +567,14 @@
             });
         }
 
-        async function processStatusCheck(type, form, resultDivId, btnId) {
-            const resultDiv = document.getElementById(resultDivId);
-            const checkBtn = document.getElementById(btnId);
-            
-            if (!resultDiv) {
-                console.error('Result div not found:', resultDivId);
-                return;
-            }
-            
+        async function processStatusCheck(form) {
+            const resultDiv = document.getElementById('statusResult');
+            const checkBtn = document.getElementById('checkBtn');
             const btnText = checkBtn ? (checkBtn.querySelector('.btn-text') || checkBtn) : null;
             
             resultDiv.innerHTML = '';
             resultDiv.style.display = 'none';
             
-            // Get form data using FormData
             const formData = new FormData(form);
             const applicationNo = formData.get('applicationNo')?.trim();
             
@@ -614,44 +583,20 @@
                 return;
             }
             
-            // Validate application ID format if it looks like ECR-G- or ECR-NG-
-            const prefix = type === 'gazetted' ? 'ECR-G-' : 'ECR-NG-';
-            if (applicationNo.startsWith(prefix)) {
-                // Allow a reasonable range of alphanumeric characters after the prefix
-                const idRegex = new RegExp(`^${prefix}[A-Z0-9]{3,20}$`);
-                if (!idRegex.test(applicationNo)) {
-                    showErrorMessage(resultDiv, `Invalid ${type} application ID format. Must be ${prefix} followed by alphanumeric characters.`);
-                    return;
-                }
-            }
-            
             showLoadingState(resultDiv, 'Checking application status...');
             if (checkBtn) checkBtn.disabled = true;
             if (btnText) {
-                if (btnText.innerHTML !== undefined) {
-                    btnText.innerHTML = '<span class="loading-spinner"></span> Checking...';
-                } else {
-                    btnText.textContent = 'Checking...';
-                }
+                btnText.innerHTML = '<span class="loading-spinner"></span> Checking...';
             }
             
             try {
-                const apiUrl = `/api/status/${type}`;
-                console.log('Making request to:', apiUrl);
-                
-                const response = await fetch(apiUrl, {
+                const response = await fetch('/api/status/check', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ applicationNo })
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.message || `Server returned status ${response.status}`);
-                }
 
                 const result = await response.json();
                 
@@ -659,11 +604,11 @@
                     throw new Error(result.message || 'Application not found');
                 }
                 
-                displayApplicationDetails(result.data, resultDiv, type);
+                displayApplicationDetails(result.data, resultDiv, result.type);
                 
             } catch (error) {
                 console.error('Status check error:', error);
-                showErrorMessage(resultDiv, error.message || 'Failed to check application status');
+                showErrorMessage(resultDiv, error.message || 'Failed to check status');
             } finally {
                 if (checkBtn) checkBtn.disabled = false;
                 if (btnText) {

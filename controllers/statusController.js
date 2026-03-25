@@ -138,40 +138,59 @@ router.post('/non-gazetted', async (req, res) => {
   }
 });
 
-// Get application by ID (for direct links)
-router.get('/:type/:id', async (req, res) => {
+// Unified status check by application number
+router.post('/check', async (req, res) => {
   try {
-    const { type, id } = req.params;
+    const { applicationNo } = req.body;
     
-    let record;
-    if (type === 'gazetted') {
-      record = await Gazetted.findById(id);
-    } else if (type === 'non-gazetted') {
-      record = await NonGazetted.findById(id);
-    } else {
+    if (!applicationNo) {
       return res.status(400).json({
         success: false,
-        message: 'Invalid application type'
+        message: 'Please provide an Application Number'
       });
     }
-    
+
+    console.log('Unified status check request:', applicationNo);
+
+    // Build the query
+    const query = { 
+      $or: [
+        { applicationNo: applicationNo },
+        { ruid: applicationNo },
+        { empNo: applicationNo }
+      ]
+    };
+
+    if (mongoose.Types.ObjectId.isValid(applicationNo)) {
+      query.$or.push({ _id: applicationNo });
+    }
+
+    // Search both collections
+    let record = await Gazetted.findOne(query);
+    let type = 'gazetted';
+
+    if (!record) {
+      record = await NonGazetted.findOne(query);
+      type = 'non-gazetted';
+    }
+
     if (!record) {
       return res.status(404).json({ 
         success: false, 
-        message: 'Application not found' 
+        message: 'No application found with the provided application number' 
       });
     }
     
     res.json({ 
       success: true, 
-      data: record 
+      data: record,
+      type: type
     });
   } catch (error) {
-    console.error('Application fetch error:', error);
+    console.error('Unified status check error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message: 'Internal server error'
     });
   }
 });

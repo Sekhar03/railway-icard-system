@@ -228,13 +228,29 @@ async function generateIdCard(application, type) {
       // 5. QR Code
       try {
         const qrData = JSON.stringify({
-          applicationNo: application.applicationNo,
+          appNo: application.applicationNo,
           name: application.name,
-          empNo: idNumber
+          empNo: idNumber,
+          desig: application.designation,
+          dept: application.department,
+          station: application.station,
+          dob: formatDate(application.dob),
+          blood: application.bloodGroup || 'N/A'
         });
-        const qrCodeDataURL = await QRCode.toDataURL(qrData);
+        const qrCodeOptions = {
+          errorCorrectionLevel: 'H',
+          margin: 1,
+          width: 120,
+          color: {
+            dark: '#000000',
+            light: '#ffffff'
+          }
+        };
+        const qrCodeDataURL = await QRCode.toDataURL(qrData, qrCodeOptions);
         doc.image(qrCodeDataURL, 230, instY - 45, { width: 60, height: 60 });
-      } catch (err) {}
+      } catch (err) {
+        console.error('QR Code Generation Error:', err);
+      }
 
       doc.end();
     } catch (error) {
